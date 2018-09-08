@@ -3,20 +3,20 @@
     <div class="container">
         <div class="row">
           <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 form-group">
-              <label for="message">Write us a message</label><br>
+              <label for="text">Text Editor</label><br>
               <textarea
-                      id="message"
+                      id="text"
                       rows="5"
                       class="form-control"
-                      placeholder="Type your message here"
-                      v-model.lazy="message"></textarea>
+                      placeholder="Type your text here"
+                      v-model.lazy="text"></textarea>
           </div>
         </div>
 
         <div class="row">
             <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
-                <button class="btn btn-primary" @click="addItem">Submit</button>
-                <button class="btn btn-danger" @click="undoItem">Undo</button>
+                <button class="btn btn-primary" @click="addText">Save</button>
+                <button class="btn btn-danger" @click="undoText">Undo</button>
             </div>
         </div>
 
@@ -24,12 +24,14 @@
 
         <div class="row">
             <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
-              <div v-if="messageBox.length">
-                <h4 class="resultBox" 
-                v-if="sentMessage">Your sent message is: <span v-colorized>{{ currentItem }}</span></h4>
+              <div v-if="textStatesQueue.length">
+                <h4 class="shownText" 
+                v-if="savedText">Your saved text is:<br><br>
+                <span v-colorized>{{ textToShow }}</span></h4>
 
-                <h4 class="resultBox" 
-                v-else>Your previous message was: <span v-colorized:previous="'red'">{{ currentItem }}</span></h4>
+                <h4 class="shownText" 
+                v-else>Your previously saved text is:<br><br>
+                <span v-colorized:previous="'red'">{{ textToShow }}</span></h4>
               </div>
             </div>
         </div>
@@ -41,25 +43,25 @@
 export default {
   data: function() {
     return {
-      message: '',
-      messageBox: [],
-      currentItem: '',
-      sentMessage: true
+      text: '',
+      textStatesQueue: [],
+      textToShow: '',
+      savedText: true
     }
   },
   methods: {
-    addItem(){
-      if(!this.message == ''){
-        this.messageBox.push(this.message);
-        this.message = '';
-        this.currentItem = this.messageBox[this.messageBox.length - 1];
-        this.sentMessage = true;
+    addText(){
+      if(this.text !== ''){
+        this.textStatesQueue.push(this.text);
+        this.text = '';
+        this.textToShow = this.textStatesQueue[this.textStatesQueue.length - 1];
+        this.savedText = true;
       }
     },
-    undoItem(messageBox){
-      this.messageBox.pop();
-      this.currentItem = this.messageBox[this.messageBox.length - 1];
-      this.sentMessage = false;
+    undoText(textStatesQueue){
+      this.textStatesQueue.pop();
+      this.textToShow = this.textStatesQueue[this.textStatesQueue.length - 1];
+      this.savedText = false;
     }
   }
 }
@@ -75,7 +77,7 @@ export default {
     text-align: center;
   }
 
-  .resultBox {
+  .shownText {
     white-space: pre;
   }
 </style>
