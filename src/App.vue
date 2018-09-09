@@ -56,7 +56,7 @@
 
         <div class="row">
             <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
-              <div v-if="stackText.length">
+              <div v-if="stackData.length">
                 <h4 class="shownText" 
                 v-if="savedText">Your saved text is:<br><br>
                 <span :style="{color: colorToUse, 
@@ -80,51 +80,52 @@ export default {
   data: function() {
     return {
       text: '',
-      stackText: [],
       textToShow: '',
-      savedText: true,
       textColor: '',
-      stackColor: [],
       colorToUse: '',
       textBackgroundColor: '',
-      stackBackgroundColor: [],
       backgroundColorToUse: '',
       textSize: '',
-      stackTextSize: [],
-      sizeToUse: ''
+      sizeToUse: '',
+      stackData: [],
+      objData: {},
+      savedText: true
     }
   },
   methods: {
     addText(){
       if(this.text !== ''){
-        this.stackText.push(this.text);
+        this.objData = {
+          text: this.text,
+          color: this.textColor,
+          background: this.textBackgroundColor,
+          size: this.textSize
+        };
+        
+        this.stackData.push(this.objData);
+
         this.text = '';
-        this.textToShow = this.stackText[this.stackText.length - 1];
-        this.stackColor.push(this.textColor);
         this.textColor = '';
-        this.colorToUse = this.stackColor[this.stackColor.length - 1];
-        this.stackBackgroundColor.push(this.textBackgroundColor);
         this.textBackgroundColor = '';
-        this.backgroundColorToUse = this.stackBackgroundColor[this.stackBackgroundColor.length - 1];
-        this.stackTextSize.push(this.textSize);
         this.textSize = '';
-        this.sizeToUse = this.stackTextSize[this.stackTextSize.length - 1] + 'px';
-        this.savedText = true;
+
+        this.textToShow = this.stackData[this.stackData.length - 1].text;
+        this.colorToUse = this.stackData[this.stackData.length - 1].color;
+        this.backgroundColorToUse = this.stackData[this.stackData.length - 1].background;
+        this.sizeToUse = this.stackData[this.stackData.length - 1].size + 'px';
+        this.savedText = true; 
       }
     },
     undoText(stackText){
-      this.stackText.pop();
-      this.textToShow = this.stackText[this.stackText.length - 1];
-      this.stackColor.pop();
-      this.colorToUse = this.stackColor[this.stackColor.length - 1];
-      this.stackBackgroundColor.pop();
-      this.backgroundColorToUse = this.stackBackgroundColor[this.stackBackgroundColor.length - 1];
-      this.stackTextSize.pop();
-      this.sizeToUse = this.stackTextSize[this.stackTextSize.length - 1]  + 'px';
+      this.stackData.pop();
+      this.textToShow = this.stackData[this.stackData.length - 1].text;
+      this.colorToUse = this.stackData[this.stackData.length - 1].color;
+      this.backgroundColorToUse = this.stackData[this.stackData.length - 1].background;
+      this.sizeToUse = this.stackData[this.stackData.length - 1].size  + 'px';
       this.savedText = false;
-      if(this.textSize === ''){
-        this.sizeToUse = '1em';
-      }
+     if(this.stackData[this.stackData.length - 1].size === ""){
+       this.sizeToUse = "1em";
+     }
     }
   }
 }
