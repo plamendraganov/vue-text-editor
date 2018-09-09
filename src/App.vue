@@ -52,8 +52,6 @@
             </div>
         </div>
 
-        <p>{{ stackTextSize }}</p>
-
         <hr>
 
         <div class="row">
@@ -124,6 +122,9 @@ export default {
       this.stackTextSize.pop();
       this.sizeToUse = this.stackTextSize[this.stackTextSize.length - 1]  + 'px';
       this.savedText = false;
+      if(this.textSize === ''){
+        this.sizeToUse = '1em';
+      }
     }
   }
 }
