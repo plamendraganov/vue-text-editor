@@ -24,7 +24,7 @@
 
         <div class="row">
             <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
-              <div v-if="textStatesQueue.length">
+              <div v-if="stackText.length">
                 <h4 class="shownText" 
                 v-if="savedText">Your saved text is:<br><br>
                 <span v-colorized>{{ textToShow }}</span></h4>
@@ -44,7 +44,7 @@ export default {
   data: function() {
     return {
       text: '',
-      textStatesQueue: [],
+      stackText: [],
       textToShow: '',
       savedText: true
     }
@@ -52,15 +52,15 @@ export default {
   methods: {
     addText(){
       if(this.text !== ''){
-        this.textStatesQueue.push(this.text);
+        this.stackText.push(this.text);
         this.text = '';
-        this.textToShow = this.textStatesQueue[this.textStatesQueue.length - 1];
+        this.textToShow = this.stackText[this.stackText.length - 1];
         this.savedText = true;
       }
     },
-    undoText(textStatesQueue){
-      this.textStatesQueue.pop();
-      this.textToShow = this.textStatesQueue[this.textStatesQueue.length - 1];
+    undoText(stackText){
+      this.stackText.pop();
+      this.textToShow = this.stackText[this.stackText.length - 1];
       this.savedText = false;
     }
   }
