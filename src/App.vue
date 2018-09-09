@@ -7,22 +7,22 @@
               <div class="dropdownHolder">
               <select v-model="textColor">
                 <option value="" disabled selected hidden>Color</option>
-                <option value="black" :style="{backgroundColor:"coral"}>Black</option>
-                <option value="red">Red</option>
-                <option value="blue">Blue</option>
-                <option value="green">Green</option>
-                <option value="yellow">Yellow</option>
-                <option value="purple">Purple</option>
+                <option value="black" style="backgroundColor: black">Black</option>
+                <option value="red" style="backgroundColor: red">Red</option>
+                <option value="blue" style="backgroundColor: blue">Blue</option>
+                <option value="green" style="backgroundColor: green">Green</option>
+                <option value="yellow" style="backgroundColor: yellow">Yellow</option>
+                <option value="purple" style="backgroundColor: purple">Purple</option>
               </select>
         
               <select v-model="textBackgroundColor">
               <option value="" disabled selected hidden>Background-Color</option>
-                <option value="black">Black</option>
-                <option value="red">Red</option>
-                <option value="blue">Blue</option>
-                <option value="green">Green</option>
-                <option value="yellow">Yellow</option>
-                <option value="purple">Purple</option>
+                <option value="black" style="backgroundColor: black">Black</option>
+                <option value="red" style="backgroundColor: red">Red</option>
+                <option value="blue" style="backgroundColor: blue">Blue</option>
+                <option value="green" style="backgroundColor: green">Green</option>
+                <option value="yellow" style="backgroundColor: yellow">Yellow</option>
+                <option value="purple" style="backgroundColor: purple">Purple</option>
               </select>
 
               <select v-model="textSize">
@@ -147,5 +147,9 @@ export default {
 
   .dropdownHolder {
     text-align: left;
+  }
+  
+  option {
+   color: white;
   }
 </style>
