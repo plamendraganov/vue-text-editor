@@ -27,48 +27,32 @@
 
               <select v-model="textSize">
                 <option value="" disabled selected hidden>Font-Size</option>
+                <option value="12">12</option>
+                <option value="14">14</option>
+                <option value="16">16</option>
+                <option value="18">18</option>
                 <option value="20">20</option>
-                <option value="30">30</option>
-                <option value="40">40</option>
-                <option value="50">50</option>
-                <option value="60">60</option>
-                <option value="70">70</option>
+                <option value="22">22</option>
               </select>
               </div>
 
               <textarea
-                      id="text"
-                      rows="5"
-                      class="form-control"
-                      placeholder="Type your text here"
-                      v-model.lazy="text"></textarea>
+                id="text"
+                rows="5"
+                class="form-control"
+                placeholder="Type your text here"
+                v-model.lazy="textToShow"
+                value="this is text"
+                :style="{color: textColor, 
+                backgroundColor: textBackgroundColor,
+                fontSize: textSize + 'px'}">{{ value }}</textarea>
           </div>
         </div>
 
         <div class="row">
             <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
-                <button class="btn btn-primary" @click="addText">Save</button>
-                <button class="btn btn-danger" @click="undoText">Undo</button>
-            </div>
-        </div>
-
-        <hr>
-
-        <div class="row">
-            <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
-              <div v-if="stackData.length">
-                <h4 class="shownText" 
-                v-if="savedText">Your saved text is:<br><br>
-                <span :style="{color: colorToUse, 
-                backgroundColor: backgroundColorToUse,
-                fontSize: sizeToUse}">{{ textToShow }}</span></h4>
-
-                <h4 class="shownText" 
-                v-else>Your previously saved text is:<br><br>
-                <span :style="{color: colorToUse,
-                backgroundColor: backgroundColorToUse,
-                fontSize: sizeToUse}">{{ textToShow }}</span></h4>
-              </div>
+                <button class="btn btn-info" @click="add">Save</button>
+                <button class="btn btn-danger" @click="undo">Undo</button>
             </div>
         </div>
     </div>
@@ -79,53 +63,47 @@
 export default {
   data: function() {
     return {
-      text: '',
       textToShow: '',
       textColor: '',
-      colorToUse: '',
       textBackgroundColor: '',
-      backgroundColorToUse: '',
       textSize: '',
-      sizeToUse: '',
-      stackData: [],
-      objData: {},
-      savedText: true
+      obj: {},
+      stack: []
     }
   },
   methods: {
-    addText(){
-      if(this.text !== ''){
-        this.objData = {
-          text: this.text,
-          color: this.textColor,
-          background: this.textBackgroundColor,
-          size: this.textSize
-        };
-        
-        this.stackData.push(this.objData);
+    add(){
+      this.obj = {
+        color: this.textColor,
+        background: this.textBackgroundColor,
+        size: this.textSize,
+        text: this.textToShow
+      };
 
-        this.text = '';
+      this.stack.push(this.obj);
+        this.textToShow = this.stack[this.stack.length - 1].text;
+        this.textColor = this.stack[this.stack.length - 1].color;
+        this.textBackgroundColor = this.stack[this.stack.length - 1].background;
+        this.textSize = this.stack[this.stack.length - 1].size;
+      },
+
+    undo(){
+     if(this.stack.length === 1){
+        this.textToShow = '';
         this.textColor = '';
         this.textBackgroundColor = '';
         this.textSize = '';
-
-        this.textToShow = this.stackData[this.stackData.length - 1].text;
-        this.colorToUse = this.stackData[this.stackData.length - 1].color;
-        this.backgroundColorToUse = this.stackData[this.stackData.length - 1].background;
-        this.sizeToUse = this.stackData[this.stackData.length - 1].size + 'px';
-        this.savedText = true; 
+      }else{
+        this.stack.pop();
+        this.textToShow = this.stack[this.stack.length - 1].text;
+        this.textColor = this.stack[this.stack.length - 1].color;
+        this.textBackgroundColor = this.stack[this.stack.length - 1].background;
+        this.textSize = this.stack[this.stack.length - 1].size;
+        
+        if(this.stack[this.stack.length - 1].size === ""){
+          this.textSize = "14";
+        }
       }
-    },
-    undoText(stackText){
-      this.stackData.pop();
-      this.textToShow = this.stackData[this.stackData.length - 1].text;
-      this.colorToUse = this.stackData[this.stackData.length - 1].color;
-      this.backgroundColorToUse = this.stackData[this.stackData.length - 1].background;
-      this.sizeToUse = this.stackData[this.stackData.length - 1].size  + 'px';
-      this.savedText = false;
-     if(this.stackData[this.stackData.length - 1].size === ""){
-       this.sizeToUse = "1em";
-     }
     }
   }
 }
