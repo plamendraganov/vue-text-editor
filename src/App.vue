@@ -114,57 +114,58 @@
               textColor: '',
               textBackgroundColor: '',
               textSize: '',
-              textToShow2: '',
-              textColor2: '',
-              textBackgroundColor2: '',
-              textSize2: '',
               obj: {},
               stack: []
           }
         },
         methods: {
-          add() {
-              this.obj = {
-                  color: this.textColor,
-                  background: this.textBackgroundColor,
-                  size: this.textSize,
-                  text: this.textToShow
-              };
+            add() {
+                if(this.textToShow !== ""){
 
-              list.addToHead(this.obj);
+                    this.obj = {
+                        color: this.textColor,
+                        background: this.textBackgroundColor,
+                        size: this.textSize,
+                        text: this.textToShow
+                    };  
+                    list.addToHead(this.obj);   
+                    this.textToShow = list.head.value.text;
+                    this.textColor = list.head.value.color;
+                    this.textBackgroundColor = list.head.value.background;
+                    this.textSize = list.head.value.size;       
+                    pointerBox = [];
+                    counter = -1;   
+                    this.textToShow = "";
+                    this.textColor = "";
+                    this.textBackgroundColor = "";
+                    this.textSize = "";
+                }
 
-              this.textToShow = list.head.value.text;
-              this.textColor = list.head.value.color;
-              this.textBackgroundColor = list.head.value.background;
-              this.textSize = list.head.value.size;    
+            },
 
-              pointerBox = [];
-              counter = -1;
-          },
+            undo() {
+                redoPointer = list.removeHead();
+                pointerBox.push(redoPointer);
+                counter++;
+                this.textToShow = list.head.value.text;
+                this.textColor = list.head.value.color;
+                this.textBackgroundColor = list.head.value.background;
+                this.textSize = list.head.value.size;
+                if(list.head.value.size === ""){
+                    this.textSize = "14";
+                }
+            },
 
-          undo() {
-              redoPointer = list.removeHead();
-              pointerBox.push(redoPointer);
-              counter++;
-
-              this.textToShow = list.head.value.text;
-              this.textColor = list.head.value.color;
-              this.textBackgroundColor = list.head.value.background;
-              this.textSize = list.head.value.size;
-
-              if(list.head.value.size === ""){
-                  this.textSize = "14";
-              }
-          },
-
-          redo() {
-              list.addToHead(pointerBox[counter])
-              this.textToShow = list.head.value.text;
-              this.textColor = list.head.value.color;
-              this.textBackgroundColor = list.head.value.background;
-              this.textSize = list.head.value.size;
-              counter--;
-          }
+            redo() {
+                if(counter >= 0){
+                    list.addToHead(pointerBox[counter])
+                    this.textToShow = list.head.value.text;
+                    this.textColor = list.head.value.color;
+                    this.textBackgroundColor = list.head.value.background;
+                    this.textSize = list.head.value.size;
+                    counter--;
+                }
+            }
         }
       }
 
