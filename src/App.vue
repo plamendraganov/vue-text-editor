@@ -60,53 +60,96 @@
 </template>
 
 <script>
-export default {
-  data: function() {
-    return {
-      textToShow: '',
-      textColor: '',
-      textBackgroundColor: '',
-      textSize: '',
-      obj: {},
-      stack: []
-    }
-  },
-  methods: {
-    add(){
-      this.obj = {
-        color: this.textColor,
-        background: this.textBackgroundColor,
-        size: this.textSize,
-        text: this.textToShow
+      function LinkedList() {
+          this.head = null;
+          this.tail = null;
+      }
+
+      function Node(value, next, prev) {
+          this.value = value;
+          this.next = next;
+          this.prev = prev;
+      }
+
+      LinkedList.prototype.addToHead = function(value) {
+          const newNode = new Node(value, this.head, null);
+          if(this.head){ 
+              this.head.prev = newNode;
+          }else{
+              this.tail = newNode; 
+          }
+          this.head = newNode;
       };
 
-      this.stack.push(this.obj);
-        this.textToShow = this.stack[this.stack.length - 1].text;
-        this.textColor = this.stack[this.stack.length - 1].color;
-        this.textBackgroundColor = this.stack[this.stack.length - 1].background;
-        this.textSize = this.stack[this.stack.length - 1].size;
-      },
+      LinkedList.prototype.addToTail = function(value) {
+          const newNode = new Node(value, null, this.tail);
+          if(this.tail){
+              this.tail.next = newNode;
+          }else{
+              this.head = newNode;
+          }
+          this.tail = newNode;
+      }
 
-    undo(){
-     if(this.stack.length === 1){
-        this.textToShow = '';
-        this.textColor = '';
-        this.textBackgroundColor = '';
-        this.textSize = '';
-      }else{
-        this.stack.pop();
-        this.textToShow = this.stack[this.stack.length - 1].text;
-        this.textColor = this.stack[this.stack.length - 1].color;
-        this.textBackgroundColor = this.stack[this.stack.length - 1].background;
-        this.textSize = this.stack[this.stack.length - 1].size;
-        
-        if(this.stack[this.stack.length - 1].size === ""){
-          this.textSize = "14";
+      LinkedList.prototype.removeHead = function() {
+          if (!this.head) return null;
+          let value = this.head.value;
+          this.head = this.head.next;
+
+          if (this.head) this.head.prev = null;
+          else this.tail = null;
+
+          return value;
+      }
+
+      const list = new LinkedList();
+
+      export default {
+        data: function() {
+          return {
+              result: '',
+              textToShow: '',
+              textColor: '',
+              textBackgroundColor: '',
+              textSize: '',
+              textToShow2: '',
+              textColor2: '',
+              textBackgroundColor2: '',
+              textSize2: '',
+              obj: {},
+              stack: []
+          }
+        },
+        methods: {
+          add() {
+              this.obj = {
+                  color: this.textColor,
+                  background: this.textBackgroundColor,
+                  size: this.textSize,
+                  text: this.textToShow
+              };
+
+              list.addToHead(this.obj);
+
+              this.textToShow = list.head.value.text;
+              this.textColor = list.head.value.color;
+              this.textBackgroundColor = list.head.value.background;
+              this.textSize = list.head.value.size;     
+          },
+
+          undo() {
+              list.removeHead();
+              this.textToShow = list.head.value.text;
+              this.textColor = list.head.value.color;
+              this.textBackgroundColor = list.head.value.background;
+              this.textSize = list.head.value.size;
+
+              if(list.head.value.size === ""){
+                  this.textSize = "14";
+              }
+          }
         }
       }
-    }
-  }
-}
 
 </script>
 
