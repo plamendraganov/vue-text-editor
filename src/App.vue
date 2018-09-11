@@ -137,6 +137,9 @@
               this.textColor = list.head.value.color;
               this.textBackgroundColor = list.head.value.background;
               this.textSize = list.head.value.size;    
+
+              pointerBox = [];
+              counter = -1;
           },
 
           undo() {
