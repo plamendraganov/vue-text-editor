@@ -53,6 +53,7 @@
             <div class="col-xs-12 col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3">
                 <button class="btn btn-info" @click="add">Save</button>
                 <button class="btn btn-danger" @click="undo">Undo</button>
+                <button class="btn btn-success" @click="redo">Redo</button>
             </div>
         </div>
     </div>
@@ -83,18 +84,6 @@
           this.head = newNode;
       };
 
-      LinkedList.prototype.addToTail = function(value) {
-          const newNode = new Node(value, null, this.tail);
-
-          if(this.tail){
-              this.tail.next = newNode;
-          }else{
-              this.head = newNode;
-          }
-
-          this.tail = newNode;
-      }
-
       LinkedList.prototype.removeHead = function() {
           if(!this.head){
               return null;
@@ -112,7 +101,10 @@
           return value;
       }
 
-      const list = new LinkedList();
+      let list = new LinkedList();
+      let redoPointer;
+      let pointerBox = [];
+      let counter = -1;
 
       export default {
         data: function() {
@@ -144,11 +136,14 @@
               this.textToShow = list.head.value.text;
               this.textColor = list.head.value.color;
               this.textBackgroundColor = list.head.value.background;
-              this.textSize = list.head.value.size;     
+              this.textSize = list.head.value.size;    
           },
 
           undo() {
-              list.removeHead();
+              redoPointer = list.removeHead();
+              pointerBox.push(redoPointer);
+              counter++;
+
               this.textToShow = list.head.value.text;
               this.textColor = list.head.value.color;
               this.textBackgroundColor = list.head.value.background;
@@ -157,6 +152,15 @@
               if(list.head.value.size === ""){
                   this.textSize = "14";
               }
+          },
+
+          redo() {
+              list.addToHead(pointerBox[counter])
+              this.textToShow = list.head.value.text;
+              this.textColor = list.head.value.color;
+              this.textBackgroundColor = list.head.value.background;
+              this.textSize = list.head.value.size;
+              counter--;
           }
         }
       }
