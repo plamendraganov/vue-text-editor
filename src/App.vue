@@ -42,10 +42,9 @@
                 class="form-control"
                 placeholder="Type your text here"
                 v-model.lazy="textToShow"
-                value="this is text"
                 :style="{color: textColor, 
                 backgroundColor: textBackgroundColor,
-                fontSize: textSize + 'px'}">{{ value }}</textarea>
+                fontSize: textSize + 'px'}"></textarea>
           </div>
         </div>
 
@@ -115,7 +114,13 @@
               textBackgroundColor: '',
               textSize: '',
               obj: {},
-              stack: []
+              stack: [],
+              updateCurrentState: function(updatedState){
+                    this.textToShow = updatedState.text;
+                    this.textColor = updatedState.color;
+                    this.textBackgroundColor = updatedState.background;
+                    this.textSize = updatedState.size;
+              }
           }
         },
         methods: {
@@ -128,11 +133,10 @@
                         size: this.textSize,
                         text: this.textToShow
                     };  
-                    list.addToHead(this.obj);   
-                    this.textToShow = list.head.value.text;
-                    this.textColor = list.head.value.color;
-                    this.textBackgroundColor = list.head.value.background;
-                    this.textSize = list.head.value.size;       
+                    list.addToHead(this.obj);  
+
+                    this.updateCurrentState(list.head.value);
+                           
                     pointerBox = [];
                     counter = -1;   
                     this.textToShow = "";
@@ -147,10 +151,9 @@
                 redoPointer = list.removeHead();
                 pointerBox.push(redoPointer);
                 counter++;
-                this.textToShow = list.head.value.text;
-                this.textColor = list.head.value.color;
-                this.textBackgroundColor = list.head.value.background;
-                this.textSize = list.head.value.size;
+
+                this.updateCurrentState(list.head.value);
+
                 if(list.head.value.size === ""){
                     this.textSize = "14";
                 }
@@ -159,10 +162,9 @@
             redo() {
                 if(counter >= 0){
                     list.addToHead(pointerBox[counter])
-                    this.textToShow = list.head.value.text;
-                    this.textColor = list.head.value.color;
-                    this.textBackgroundColor = list.head.value.background;
-                    this.textSize = list.head.value.size;
+                    
+                    this.updateCurrentState(list.head.value);
+                    
                     counter--;
                 }
             }
